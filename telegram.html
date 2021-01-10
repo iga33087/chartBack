@@ -1,0 +1,38 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <div class="chartBox">
+      <div id="chartBoxList">
+
+      </div>
+      <div class="chartBoxMenu">
+        <input id="chartBoxText" type="text">
+        <button onclick="snedMsg()">SNED</button>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+      <script>
+        let msg=[]
+        let socket = io.connect('http://localhost:3000');
+        setTimeout(()=> {
+          socket.on(socket.id,getClientMsg)
+          console.log(socket.id)
+        },1000)
+        console.log(123)
+        function snedMsg() {
+          let obj={id:socket.id,text:document.getElementById('chartBoxText').value}
+          socket.emit('clientMsg',obj);
+        }
+        function getClientMsg(x) {
+          console.log(x)
+          let text=""
+          msg.push(x)
+          for(let item of msg) {
+            text+="<div class='chartBoxListItem'>"+item.text+"</div>"
+          }
+          document.getElementById('chartBoxList').innerHTML=text;
+        }
+      </script>
+    </div>
+  </body>
+</html>
